@@ -44,6 +44,7 @@ interface GroundingSlice {
 interface GameActions {
   setBoatPosition: (position: Vector3Tuple) => void
   setBoatHeading: (heading: number) => void
+  setVelocity: (velocity: number) => void
   setThrottle: (throttle: number) => void
   setWheel: (wheel: number) => void
   setActiveScene: (scene: ActiveScene) => void
@@ -86,6 +87,7 @@ export const useGameStore = create<GameState>()((set) => ({
   // Actions
   setBoatPosition: (position) => set({ position }),
   setBoatHeading: (heading) => set({ heading }),
+  setVelocity: (velocity) => set({ velocity }),
   setThrottle: (throttle) => set({ throttle }),
   setWheel: (wheel) => set({ wheel }),
   setActiveScene: (scene) => set({ activeScene: scene }),
