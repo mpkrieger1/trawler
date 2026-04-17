@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+*.code-workspace
+
+# Vite
+vite.config.ts.timestamp-*
+
+# TypeScript
+*.tsbuildinfo
+
+# Asset source files (only built GLBs go in public/)
+*.blend
+*.blend1
+*.fbx
+*.max
+
+# AI-assisted development artifacts
+docs/sprints/*-log.md
+
+# Claude Code local settings (keep project settings, skip personal)
+.claude/settings.local.json
