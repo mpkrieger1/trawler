@@ -5,3 +5,4 @@ This file tracks all sprints for the Trawler Captain project. Updated by sprint-
 | Sprint | Goal | Status | Plan Date | Retro Date | Health |
 |--------|------|--------|-----------|------------|--------|
 | 1 | Foundation: scaffold, water/sky, trawler + follow camera | Complete | 2026-04-17 | 2026-04-17 | 🟢 Clean |
+| 2 | Boat Handling: physics, HUD controls, keyboard, gauges | In Progress | 2026-04-17 | — | — |

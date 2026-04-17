@@ -5,7 +5,9 @@ import Ocean from '@/world/Ocean'
 import SkyDome from '@/world/SkyDome'
 import Trawler from '@/boat/Trawler'
 import FollowCamera from '@/boat/FollowCamera'
-import DebugControls from '@/boat/DebugControls'
+import KeyboardControls from '@/boat/KeyboardControls'
+import BoatPhysicsLoop from '@/systems/boatPhysicsLoop'
+import Hud from '@/ui/Hud'
 
 export default function App() {
   return (
@@ -22,9 +24,11 @@ export default function App() {
           <SkyDome />
           <Trawler />
         </Suspense>
+        <BoatPhysicsLoop />
         <FollowCamera />
       </Canvas>
-      <DebugControls />
+      <KeyboardControls />
+      <Hud />
     </>
   )
 }
