@@ -35,3 +35,4 @@ docs/sprints/*-log.md
 
 # Claude Code local settings (keep project settings, skip personal)
 .claude/settings.local.json
+.claude/skills/
