@@ -6,6 +6,7 @@ import FollowCamera from '@/boat/FollowCamera'
 import KeyboardControls from '@/boat/KeyboardControls'
 import Chartplotter from '@/nav/Chartplotter'
 import Ocean from '@/world/Ocean'
+import PortLoader from '@/world/PortLoader'
 import SkyDome from '@/world/SkyDome'
 import Trawler from '@/boat/Trawler'
 import Hud from '@/ui/Hud'
@@ -30,6 +31,7 @@ export default function VoyageScene() {
             <Ocean />
             <SkyDome />
             <Trawler />
+            <PortLoader />
           </Suspense>
           <BoatPhysicsLoop />
           <FollowCamera />

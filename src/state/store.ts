@@ -55,6 +55,7 @@ interface GameActions {
   setWeather: (weather: WeatherState) => void
   setDepartureTime: (hours: number) => void
   setTimeCompression: (level: number) => void
+  setLoadedPortId: (id: string | null) => void
 }
 
 export interface GameState extends VoyageSlice, BoatSlice, WorldSlice, UiSlice, GroundingSlice, GameActions {}
@@ -103,4 +104,5 @@ export const useGameStore = create<GameState>()((set) => ({
   setWeather: (weather) => set({ weather }),
   setDepartureTime: (departureTime) => set({ departureTime }),
   setTimeCompression: (timeCompression) => set({ timeCompression }),
+  setLoadedPortId: (loadedPortId) => set({ loadedPortId }),
 }))
