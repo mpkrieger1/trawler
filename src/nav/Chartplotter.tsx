@@ -8,6 +8,7 @@ import { useGameStore } from '@/state/store'
 import { createChartStyle } from './chartStyle'
 import { createBridge, type CoordinateBridge } from './coords'
 import { formatDistanceNm, greatCircleRoute } from './routing'
+import { buildTideArrowGeoJSON } from './tideArrows'
 import styles from './Chartplotter.module.css'
 
 const FALLBACK_CENTER: [number, number] = [-122.338, 47.605] // Seattle lng,lat
@@ -80,18 +81,47 @@ export default function Chartplotter() {
     boatEl.style.transform = `rotate(${state.heading * RAD_TO_DEG}deg)`
 
     map.on('load', () => {
-      if (!startPort || !destPort) return
-      const route = greatCircleRoute([startPort.lat, startPort.lng], [destPort.lat, destPort.lng])
-      map.addSource('route', { type: 'geojson', data: route })
+      if (startPort && destPort) {
+        const route = greatCircleRoute(
+          [startPort.lat, startPort.lng],
+          [destPort.lat, destPort.lng],
+        )
+        map.addSource('route', { type: 'geojson', data: route })
+        map.addLayer({
+          id: 'route-line',
+          type: 'line',
+          source: 'route',
+          layout: { 'line-cap': 'round', 'line-join': 'round' },
+          paint: { 'line-color': '#2c2e73', 'line-width': 2, 'line-opacity': 0.85 },
+        })
+      }
+
+      map.addSource('tide-arrows', {
+        type: 'geojson',
+        data: buildTideArrowGeoJSON(useGameStore.getState().gameTime),
+      })
       map.addLayer({
-        id: 'route-line',
+        id: 'tide-arrow-line',
         type: 'line',
-        source: 'route',
+        source: 'tide-arrows',
         layout: { 'line-cap': 'round', 'line-join': 'round' },
-        paint: { 'line-color': '#2c2e73', 'line-width': 2, 'line-opacity': 0.85 },
+        paint: {
+          'line-color': '#2c6fd9',
+          'line-width': [
+            'interpolate',
+            ['linear'],
+            ['get', 'magnitude'],
+            0,
+            1,
+            1.5,
+            4,
+          ],
+          'line-opacity': 0.85,
+        },
       })
     })
 
+    let lastArrowUpdateMs = 0
     const unsub = useGameStore.subscribe((s) => {
       if (!bridge) return
       try {
@@ -100,6 +130,13 @@ export default function Chartplotter() {
           boatMarker.setLngLat([lng, lat])
         }
         boatEl.style.transform = `rotate(${s.heading * RAD_TO_DEG}deg)`
+
+        const now = Date.now()
+        if (now - lastArrowUpdateMs >= 2000) {
+          lastArrowUpdateMs = now
+          const src = map.getSource('tide-arrows') as maplibregl.GeoJSONSource | undefined
+          if (src) src.setData(buildTideArrowGeoJSON(s.gameTime))
+        }
       } catch (e) {
         console.warn('Chartplotter boat marker update failed:', e)
       }
