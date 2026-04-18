@@ -69,6 +69,7 @@ interface GameActions {
   setGroundingPortId: (id: string | null) => void
   setVoyageStartTime: (ts: number | null) => void
   setDistanceTraveled: (meters: number) => void
+  setGameTime: (t: number) => void
   resetVoyageRuntime: () => void
   resetEverything: () => void
 }
@@ -132,6 +133,7 @@ export const useGameStore = create<GameState>()((set) => ({
   setGroundingPortId: (groundingPortId) => set({ groundingPortId }),
   setVoyageStartTime: (voyageStartTime) => set({ voyageStartTime }),
   setDistanceTraveled: (distanceTraveled) => set({ distanceTraveled }),
+  setGameTime: (gameTime) => set({ gameTime }),
   resetVoyageRuntime: () =>
     set({
       position: [0, 0, 0],
