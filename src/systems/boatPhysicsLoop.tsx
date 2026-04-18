@@ -18,6 +18,7 @@ export default function BoatPhysicsLoop() {
       s.setBoatPosition(next.position)
       s.setBoatHeading(next.heading)
       s.setVelocity(next.velocity)
+      s.setDistanceTraveled(s.distanceTraveled + Math.abs(next.velocity) * dt)
     } catch (e) {
       console.warn('BoatPhysicsLoop error:', e)
     }

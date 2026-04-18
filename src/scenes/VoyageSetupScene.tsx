@@ -51,6 +51,8 @@ export default function VoyageSetupScene() {
     setDepartureTime,
     setTimeCompression,
     setActiveScene,
+    setVoyageStartTime,
+    setDistanceTraveled,
   } = useGameStore()
 
   const grouped = useMemo(groupPortsByRegion, [])
@@ -58,6 +60,8 @@ export default function VoyageSetupScene() {
 
   const onStart = () => {
     if (!start.ok) return
+    setVoyageStartTime(Date.now())
+    setDistanceTraveled(0)
     setActiveScene('voyage')
   }
 

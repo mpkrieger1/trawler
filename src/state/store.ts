@@ -13,6 +13,9 @@ interface VoyageSlice {
   // hours since midnight, 0–24 (float allowed)
   departureTime: number
   timeCompression: number
+  // Runtime fields set on Start Voyage, reset on Try Again / Return to Main Menu
+  voyageStartTime: number | null
+  distanceTraveled: number
 }
 
 interface BoatSlice {
@@ -64,6 +67,10 @@ interface GameActions {
   setDepthUnderKeel: (clearance: number) => void
   setGroundingLocation: (location: [number, number] | null) => void
   setGroundingPortId: (id: string | null) => void
+  setVoyageStartTime: (ts: number | null) => void
+  setDistanceTraveled: (meters: number) => void
+  resetVoyageRuntime: () => void
+  resetEverything: () => void
 }
 
 export interface GameState extends VoyageSlice, BoatSlice, WorldSlice, UiSlice, GroundingSlice, GameActions {}
@@ -75,6 +82,8 @@ export const useGameStore = create<GameState>()((set) => ({
   weather: 'clear',
   departureTime: 8,
   timeCompression: 1,
+  voyageStartTime: null,
+  distanceTraveled: 0,
 
   // Boat
   position: [0, 0, 0],
@@ -121,4 +130,48 @@ export const useGameStore = create<GameState>()((set) => ({
   setDepthUnderKeel: (depthUnderKeel) => set({ depthUnderKeel }),
   setGroundingLocation: (groundingLocation) => set({ groundingLocation }),
   setGroundingPortId: (groundingPortId) => set({ groundingPortId }),
+  setVoyageStartTime: (voyageStartTime) => set({ voyageStartTime }),
+  setDistanceTraveled: (distanceTraveled) => set({ distanceTraveled }),
+  resetVoyageRuntime: () =>
+    set({
+      position: [0, 0, 0],
+      heading: 0,
+      velocity: 0,
+      throttle: 0,
+      wheel: 0,
+      warningActive: false,
+      fatalTriggered: false,
+      nearestDistance: Infinity,
+      depthUnderKeel: Infinity,
+      groundingLocation: null,
+      groundingPortId: null,
+      loadedPortId: null,
+      distanceTraveled: 0,
+      voyageStartTime: Date.now(),
+    }),
+  resetEverything: () =>
+    set({
+      startPortId: null,
+      destinationPortId: null,
+      weather: 'clear',
+      departureTime: 8,
+      timeCompression: 1,
+      voyageStartTime: null,
+      distanceTraveled: 0,
+      position: [0, 0, 0],
+      heading: 0,
+      velocity: 0,
+      throttle: 0,
+      wheel: 0,
+      loadedPortId: null,
+      warningActive: false,
+      fatalTriggered: false,
+      nearestDistance: Infinity,
+      depthUnderKeel: Infinity,
+      groundingLocation: null,
+      groundingPortId: null,
+      activeScene: 'menu',
+      cameraMode: '3d',
+      paused: false,
+    }),
 }))

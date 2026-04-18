@@ -1,3 +1,4 @@
+import GameOverScene from '@/scenes/GameOverScene'
 import MenuScene from '@/scenes/MenuScene'
 import VoyageScene from '@/scenes/VoyageScene'
 import VoyageSetupScene from '@/scenes/VoyageSetupScene'
@@ -11,8 +12,9 @@ export default function App() {
       return <MenuScene />
     case 'voyageSetup':
       return <VoyageSetupScene />
-    case 'voyage':
     case 'gameOver':
+      return <GameOverScene />
+    case 'voyage':
     default:
       return <VoyageScene />
   }
