@@ -202,6 +202,16 @@ Until a real GLB is sourced, `src/boat/Trawler.tsx` renders the boat from primit
 - Don't commit `node_modules`, `dist`, `.env.local`, or asset source files (only built GLBs).
 - `.gitignore` is locked in sub-task 1.1 — don't add to it casually.
 
+### Git identity in worktrees
+
+Worktrees inherit git state from the parent repo but NOT git config (no `user.name` / `user.email`). Commits will fail with "Author identity unknown". Per CLAUDE.md "NEVER update the git config", the approved workaround is inline per-command config:
+
+```bash
+git -c user.name="Matt Krieger" -c user.email="matt@k-analytics.com" commit -m "..."
+```
+
+Do not `git config user.name ...` — that writes to `.git/config` and counts as updating config.
+
 ---
 
 ## Testing Philosophy (MVP-appropriate)
@@ -248,6 +258,26 @@ resolve: {
 ```
 
 Do not remove this config. If the warning returns, verify dedupe is still present.
+
+### Worktree bootstrap
+
+This repo uses git worktrees at `.claude/worktrees/<branch>/`. Each worktree has its own `node_modules` — they are NOT shared with the parent repo. On the first session in a fresh worktree, run:
+
+```bash
+npm install --legacy-peer-deps
+```
+
+Vitest will work without this (it resolves up to the parent), but `npm run build` will fail with `[vite:load-fallback] Could not load .../node_modules/three` because `vite.config.ts` uses `path.resolve(__dirname, './node_modules/three')` which expects node_modules in the worktree root.
+
+### Dev-only `window.__store` for preview verification
+
+`src/main.tsx` attaches the Zustand store to `window.__store` when `import.meta.env.DEV` is true. This is intentional — it lets preview-tool `preview_eval` calls teleport the boat, read state, and trigger scene transitions without simulating inertia-laden keyboard input. The assignment is tree-shaken from production builds (Vite strips the `DEV` branch when minifying). Do not remove.
+
+Use from `preview_eval`:
+```js
+window.__store.getState().setBoatPosition([500, 0, 0])
+window.__store.getState().activeScene
+```
 
 ---
 
