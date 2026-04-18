@@ -212,6 +212,25 @@ git -c user.name="Matt Krieger" -c user.email="matt@k-analytics.com" commit -m "
 
 Do not `git config user.name ...` — that writes to `.git/config` and counts as updating config.
 
+### Windows filename case sensitivity
+
+On Windows, git preserves the original case of tracked files even though the filesystem is case-insensitive. A write to `README.md` succeeds on disk, but `git add README.md` will silently drop the change from the commit if the tracked name is `readme.md`. This bug has now shipped twice (Sprint 5 CLAUDE.md chore, Sprint 6 sub-task 6.4 README). Each time the cost is a split commit plus a `fix:` follow-up.
+
+**Before the first Edit/Write on any `.md` or root-level config file, run:**
+
+```bash
+git ls-files | grep -i '^<stem>\.'
+```
+
+Use the exact casing that appears in the output for every subsequent tool call — Read, Edit, Write, and `git add`. Examples of the files most affected in this repo: `claude.md` (lowercase), `readme.md` (lowercase), `docs/prds/Trawler-Captain-PRD.md` (mixed, exact), `docs/sprints/manifest.md` (lowercase), `docs/retros/sprint-N-retro.md` (lowercase).
+
+If the write already happened with the wrong case:
+1. `git status` will show the tracked (usually lowercase) name as `modified:` — that's the name to stage.
+2. Stage it with the correct casing: `git add readme.md` (not `README.md`).
+3. Do NOT amend the bad commit (CLAUDE.md forbids amend). Make a new `fix: ...` follow-up commit referencing the miss.
+
+If you want to rename a tracked file to a different case as the right long-term fix, use `git mv old.md NEW.md` as its own chore commit.
+
 ---
 
 ## Testing Philosophy (MVP-appropriate)
