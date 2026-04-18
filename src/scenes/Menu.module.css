@@ -1,24 +1,36 @@
 .menu {
   position: fixed;
   inset: 0;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(ellipse at center, #3a4e5a 0%, #1a2128 100%);
   color: #e8e8e8;
   font-family: Inter, system-ui, sans-serif;
 }
 
+.background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  /* Fallback gradient visible while the R3F Suspense boundary resolves. */
+  background: radial-gradient(ellipse at center, #3a4e5a 0%, #1a2128 100%);
+  pointer-events: none;
+}
+
 .card {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.25rem;
   padding: 3rem 3.5rem;
   border-radius: 12px;
-  background: rgba(10, 14, 20, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(6px);
+  background: rgba(10, 14, 20, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .title {

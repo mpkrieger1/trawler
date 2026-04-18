@@ -1,5 +1,7 @@
 import { useGameStore } from '@/state/store'
 
+import MenuBackground from './MenuBackground'
+
 import styles from './Menu.module.css'
 
 export default function MenuScene() {
@@ -7,6 +9,9 @@ export default function MenuScene() {
 
   return (
     <div className={styles.menu}>
+      <div className={styles.background}>
+        <MenuBackground />
+      </div>
       <div className={styles.card}>
         <h1 className={styles.title}>Trawler Captain</h1>
         <p className={styles.subtitle}>Inside Passage · Seattle to Juneau</p>
