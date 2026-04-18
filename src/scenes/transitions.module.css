@@ -1,0 +1,21 @@
+/* Shared scene fade-in.
+   App.tsx wraps the scene switch in a keyed <div>, so React remounts
+   the tree on activeScene change and this animation retriggers each
+   time. The 200 ms duration is short enough to feel instant but long
+   enough to hide the hard cut between wildly different renderers
+   (DOM menu → R3F voyage → MapLibre game-over chart). */
+
+.sceneFadeIn {
+  animation: sceneFade 200ms ease-out both;
+}
+
+@keyframes sceneFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sceneFadeIn {
+    animation: none;
+  }
+}

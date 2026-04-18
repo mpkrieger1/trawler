@@ -1,0 +1,43 @@
+# .claude-session — Trawler Captain session preferences
+
+Read at the start of every session alongside CLAUDE.md. Preferences set here override the "ask first" default for routine sub-task actions.
+
+## Mode: Auto everything
+
+The owner has opted into automation for routine end-of-sub-task actions. Do **not** pause to ask before running build/tests/commit for a scoped sub-task. Still ask for anything destructive or out-of-scope.
+
+## Auto-run before declaring a sub-task done
+
+1. `npm run build` — must exit 0. TypeScript errors block the commit; fix them first.
+2. `npm run test:run` — must exit 0. Failures block the commit; fix them first.
+3. Verify the deliverable manually (dev server, UI check, etc.) per the sub-task acceptance criteria. If the change isn't browser-observable, note that in the summary and skip the preview step.
+
+## Auto-commit at end of sub-task
+
+- One commit per sub-task. Message prefix: `sub-task X.Y: ` followed by a concise deliverable summary.
+- Stage files by name — never `git add -A` / `git add .` (see CLAUDE.md git safety).
+- Use the HEREDOC commit-message form from the system prompt; include the `Co-Authored-By` trailer.
+- Do **not** amend prior commits; always create a new commit.
+
+## Always ask before
+
+- `git push` (and especially `git push --force`)
+- Deleting files outside the current sub-task's scope
+- Installing or upgrading dependencies
+- Touching `vite.config.ts` `resolve.dedupe` (see CLAUDE.md §Vite dedupe for Three.js)
+- Any change to `CLAUDE.md`, `docs/prds/*`, or the sprint manifest beyond the row for the sprint you're actively planning/closing
+- Refactoring code outside the current sub-task's scope
+
+## Between sub-tasks
+
+- One sub-task per session. Do not start sub-task X.(Y+1) in the same session as X.Y.
+- If a sub-task reveals a bug in previously committed code outside its scope, note it in the session summary and surface it to the owner — do not silently fix it.
+
+## Retro cadence
+
+- Run `/sprint-retro N` immediately after the last sub-task of sprint N is committed, before planning sprint N+1.
+- Sprint 2 retro was written post-hoc at start of Sprint 3 planning (see [docs/retros/sprint-2-retro.md](docs/retros/sprint-2-retro.md)) — avoid repeating that pattern.
+
+## Scope guard
+
+If a session's work starts drifting beyond the sub-task's declared deliverable, stop and confirm with the owner. The CLAUDE.md Session Protocol is authoritative; this file only automates the routine steps.

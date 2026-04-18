@@ -202,6 +202,35 @@ Until a real GLB is sourced, `src/boat/Trawler.tsx` renders the boat from primit
 - Don't commit `node_modules`, `dist`, `.env.local`, or asset source files (only built GLBs).
 - `.gitignore` is locked in sub-task 1.1 — don't add to it casually.
 
+### Git identity in worktrees
+
+Worktrees inherit git state from the parent repo but NOT git config (no `user.name` / `user.email`). Commits will fail with "Author identity unknown". Per CLAUDE.md "NEVER update the git config", the approved workaround is inline per-command config:
+
+```bash
+git -c user.name="Matt Krieger" -c user.email="matt@k-analytics.com" commit -m "..."
+```
+
+Do not `git config user.name ...` — that writes to `.git/config` and counts as updating config.
+
+### Windows filename case sensitivity
+
+On Windows, git preserves the original case of tracked files even though the filesystem is case-insensitive. A write to `README.md` succeeds on disk, but `git add README.md` will silently drop the change from the commit if the tracked name is `readme.md`. This bug has now shipped twice (Sprint 5 CLAUDE.md chore, Sprint 6 sub-task 6.4 README). Each time the cost is a split commit plus a `fix:` follow-up.
+
+**Before the first Edit/Write on any `.md` or root-level config file, run:**
+
+```bash
+git ls-files | grep -i '^<stem>\.'
+```
+
+Use the exact casing that appears in the output for every subsequent tool call — Read, Edit, Write, and `git add`. Examples of the files most affected in this repo: `claude.md` (lowercase), `readme.md` (lowercase), `docs/prds/Trawler-Captain-PRD.md` (mixed, exact), `docs/sprints/manifest.md` (lowercase), `docs/retros/sprint-N-retro.md` (lowercase).
+
+If the write already happened with the wrong case:
+1. `git status` will show the tracked (usually lowercase) name as `modified:` — that's the name to stage.
+2. Stage it with the correct casing: `git add readme.md` (not `README.md`).
+3. Do NOT amend the bad commit (CLAUDE.md forbids amend). Make a new `fix: ...` follow-up commit referencing the miss.
+
+If you want to rename a tracked file to a different case as the right long-term fix, use `git mv old.md NEW.md` as its own chore commit.
+
 ---
 
 ## Testing Philosophy (MVP-appropriate)
@@ -254,6 +283,26 @@ When the PRD specifies "time to reach X" for an exponential response (throttle, 
 
 ### Multiple input sources writing to the same store field must coordinate
 When two input drivers (pointer drag + keyboard hold, touch + gamepad, etc.) can both write to the same store field, they must coordinate explicitly or they'll race. Symptoms: "the control does ~50% of what it should," "holds don't hold," "feels laggy." Established pattern: a small module-level flag object (see `src/ui/wheelInputState.ts`) that each active driver sets, with a single authority for passive behavior (spring-back, idle decay) that checks the flags. If you add a second writer to an existing store field, plug into the existing flag module rather than starting a new rAF loop.
+
+### Worktree bootstrap
+
+This repo uses git worktrees at `.claude/worktrees/<branch>/`. Each worktree has its own `node_modules` — they are NOT shared with the parent repo. On the first session in a fresh worktree, run:
+
+```bash
+npm install --legacy-peer-deps
+```
+
+Vitest will work without this (it resolves up to the parent), but `npm run build` will fail with `[vite:load-fallback] Could not load .../node_modules/three` because `vite.config.ts` uses `path.resolve(__dirname, './node_modules/three')` which expects node_modules in the worktree root.
+
+### Dev-only `window.__store` for preview verification
+
+`src/main.tsx` attaches the Zustand store to `window.__store` when `import.meta.env.DEV` is true. This is intentional — it lets preview-tool `preview_eval` calls teleport the boat, read state, and trigger scene transitions without simulating inertia-laden keyboard input. The assignment is tree-shaken from production builds (Vite strips the `DEV` branch when minifying). Do not remove.
+
+Use from `preview_eval`:
+```js
+window.__store.getState().setBoatPosition([500, 0, 0])
+window.__store.getState().activeScene
+```
 
 ---
 

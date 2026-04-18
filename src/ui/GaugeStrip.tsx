@@ -1,16 +1,18 @@
 import { useGameStore } from '@/state/store'
-import { mpsToKnots, radiansToCompass, formatDepthFt } from './gauge-format'
 
+import { formatDepthFt, mpsToKnots, radiansToCompass } from './gauge-format'
 import styles from './Hud.module.css'
 
 export default function GaugeStrip() {
   const velocity = useGameStore((s) => s.velocity)
   const heading = useGameStore((s) => s.heading)
   const depthUnderKeel = useGameStore((s) => s.depthUnderKeel)
+  const warningActive = useGameStore((s) => s.warningActive)
 
   const speedKnots = mpsToKnots(velocity).toFixed(1)
   const compass = radiansToCompass(heading).toString().padStart(3, '0')
   const depth = formatDepthFt(depthUnderKeel)
+  const depthRed = warningActive || (Number.isFinite(depthUnderKeel) && depthUnderKeel < 10)
 
   return (
     <div className={styles.gaugeStrip}>
@@ -30,7 +32,7 @@ export default function GaugeStrip() {
       </div>
       <div className={styles.gauge}>
         <div className={styles.gaugeLabel}>DEPTH</div>
-        <div className={styles.gaugeValue}>
+        <div className={`${styles.gaugeValue} ${depthRed ? styles.gaugeValueRed : ''}`}>
           {depth}
           <span className={styles.gaugeUnit}>ft</span>
         </div>

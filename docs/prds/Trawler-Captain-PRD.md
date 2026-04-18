@@ -247,6 +247,7 @@ The game is playable at each stage; more ports = more route options.
 Cruise: 8 knots @ 0.75 throttle
 Max:   10 knots @ 1.0
 Reverse: 3 knots @ −1.0
+Draft: 3 ft (used for under-keel clearance in grounding §8.3.1)
 0→cruise: ~30 sec; cruise→stop: ~45 sec coasting
 Turn rate: ~2°/sec at cruise, scales with speed
 External forces: wind + current vectors per frame, scaled by weather
@@ -289,7 +290,7 @@ The warning zone gives the player time to react (throttle back, turn away) and p
 
 - Boat = 2D circle (radius ~10m, projected to XZ plane)
 - Coastline = array of 2D line segments loaded from port's `.collision.json`
-- Check = point-to-line-segment distance (Turf.js `nearestPointOnLine`)
+- Check = point-to-line-segment distance. Use Turf.js `nearestPointOnLine` when working with lat/lng inputs; for the per-frame grounding hot path where inputs are already in local meters (XZ), an inlined 2D point-to-segment function (~15 lines) avoids Turf's per-call conversion through lat/lng km and is preferred. Correctness is verified via unit tests against a brute-force baseline — see `src/systems/grounding.ts` and its test.
 - No polygon-vs-polygon intersection, no runtime GLB parsing
 
 #### 8.3.3 Spatial grid for performance

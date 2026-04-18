@@ -1,0 +1,283 @@
+.root {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #1e2730 0%, #0f1419 100%);
+  color: #e8e8e8;
+  font-family: Inter, system-ui, sans-serif;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.title {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.backButton {
+  min-height: 48px;
+  min-width: 96px;
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: #e8e8e8;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.backButton:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.columns {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  min-height: 0;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.columnHeading {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #a8b3bd;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.columnScroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.25rem 0;
+}
+
+.regionGroup {
+  padding: 0.5rem 0;
+}
+
+.regionHeading {
+  margin: 0;
+  padding: 0.3rem 1rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b7682;
+}
+
+.portRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 48px;
+  padding: 0.55rem 1rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: #e8e8e8;
+  background: transparent;
+  border: none;
+  border-left: 3px solid transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.portRow:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.portRowSelected {
+  background: rgba(44, 46, 115, 0.35);
+  border-left-color: #2c2e73;
+}
+
+.portRowSelected:hover {
+  background: rgba(44, 46, 115, 0.45);
+}
+
+.portName {
+  font-weight: 500;
+}
+
+.portCoord {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.78rem;
+  color: #6b7682;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+  padding: 0 1.5rem 1rem;
+}
+
+.controlGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+}
+
+.label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #a8b3bd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.valueMono {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  color: #e8e8e8;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+
+.radioRow {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.radio {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.9rem;
+  color: #e8e8e8;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.radio input {
+  display: none;
+}
+
+.radioSelected {
+  background: rgba(44, 46, 115, 0.4);
+  border-color: #2c2e73;
+}
+
+.slider {
+  width: 100%;
+  accent-color: #2c2e73;
+  min-height: 48px;
+}
+
+.segmented {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.2rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+}
+
+.segment {
+  flex: 1;
+  min-height: 48px;
+  padding: 0.55rem 0.5rem;
+  font-size: 0.9rem;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  color: #a8b3bd;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.segment:hover {
+  color: #e8e8e8;
+}
+
+.segmentSelected {
+  background: #2c2e73;
+  color: #f5f5f5;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.help {
+  font-size: 0.9rem;
+  color: #a8b3bd;
+}
+
+.startButton {
+  min-height: 48px;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-family: inherit;
+  font-weight: 500;
+  color: #f5f5f5;
+  background: #2c2e73;
+  border: 1px solid #4b4f9a;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.startButton:hover:not(:disabled) {
+  background: #3a3d8a;
+}
+
+.startButton:disabled {
+  background: #3b3d4a;
+  border-color: #4a4d5a;
+  color: #8b919a;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .columns {
+    grid-template-columns: 1fr;
+  }
+  .controls {
+    grid-template-columns: 1fr;
+  }
+}
