@@ -14,11 +14,16 @@ import GroundingVignette from '@/ui/GroundingVignette'
 import Hud from '@/ui/Hud'
 import { useGameStore } from '@/state/store'
 
+import transitions from './transitions.module.css'
+
 export default function VoyageScene() {
   const cameraMode = useGameStore((s) => s.cameraMode)
 
   return (
-    <>
+    <div
+      className={transitions.sceneFadeIn}
+      style={{ position: 'fixed', inset: 0 }}
+    >
       {cameraMode === 'chart' ? (
         <Chartplotter />
       ) : (
@@ -43,6 +48,6 @@ export default function VoyageScene() {
       <KeyboardControls />
       <GroundingVignette />
       <Hud />
-    </>
+    </div>
   )
 }

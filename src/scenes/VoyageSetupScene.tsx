@@ -5,6 +5,7 @@ import { useGameStore, type WeatherState } from '@/state/store'
 
 import { canStartVoyage } from './voyage-setup-validation'
 import styles from './VoyageSetup.module.css'
+import transitions from './transitions.module.css'
 
 type PortColumn = 'start' | 'destination'
 
@@ -109,7 +110,7 @@ export default function VoyageSetupScene() {
           : 'Start and destination must differ'
 
   return (
-    <div className={styles.root}>
+    <div className={`${styles.root} ${transitions.sceneFadeIn}`}>
       <header className={styles.header}>
         <h1 className={styles.title}>Plan Your Voyage</h1>
         <button

@@ -177,6 +177,28 @@
   margin-left: 3px;
 }
 
+.pauseButton {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0.4rem 0.75rem;
+  font-size: 1rem;
+  font-family: inherit;
+  letter-spacing: 0.1em;
+  color: #e8e8e8;
+  background: rgba(24, 26, 40, 0.6);
+  border: 1px solid rgba(232, 232, 232, 0.25);
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.pauseButton:hover {
+  background: rgba(44, 46, 115, 0.6);
+}
+
 .cameraToggle {
   position: absolute;
   top: 20px;

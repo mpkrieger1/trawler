@@ -13,8 +13,9 @@ export default function GroundingLoop() {
 
   useFrame(() => {
     try {
-      const col = getCollision()
       const state = useGameStore.getState()
+      if (state.paused) return
+      const col = getCollision()
 
       if (!col) {
         groundingRef.current = null

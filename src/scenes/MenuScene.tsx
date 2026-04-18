@@ -3,12 +3,13 @@ import { useGameStore } from '@/state/store'
 import MenuBackground from './MenuBackground'
 
 import styles from './Menu.module.css'
+import transitions from './transitions.module.css'
 
 export default function MenuScene() {
   const setActiveScene = useGameStore((s) => s.setActiveScene)
 
   return (
-    <div className={styles.menu}>
+    <div className={`${styles.menu} ${transitions.sceneFadeIn}`}>
       <div className={styles.background}>
         <MenuBackground />
       </div>

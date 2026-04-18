@@ -6,6 +6,7 @@ import { clearCollision } from '@/systems/groundingState'
 
 import { formatElapsedTime } from './elapsedTime'
 import styles from './GameOver.module.css'
+import transitions from './transitions.module.css'
 
 export default function GameOverScene() {
   const groundingPortId = useGameStore((s) => s.groundingPortId)
@@ -31,7 +32,7 @@ export default function GameOverScene() {
   }
 
   return (
-    <div className={styles.scene}>
+    <div className={`${styles.scene} ${transitions.sceneFadeIn}`}>
       <div className={styles.chartLayer}>
         <Chartplotter />
       </div>

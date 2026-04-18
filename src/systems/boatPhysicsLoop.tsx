@@ -21,8 +21,9 @@ export default function BoatPhysicsLoop() {
 
   useFrame((_state, delta) => {
     try {
-      const dt = Math.min(MAX_DT, delta)
       const s = useGameStore.getState()
+      if (s.paused) return
+      const dt = Math.min(MAX_DT, delta)
 
       frameCountRef.current += 1
       if (bridge && frameCountRef.current % NEAR_PORT_CHECK_EVERY_N_FRAMES === 0) {
