@@ -171,3 +171,26 @@
   color: rgba(232, 232, 232, 0.5);
   margin-left: 3px;
 }
+
+.cameraToggle {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  min-width: 88px;
+  min-height: 48px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-family: inherit;
+  letter-spacing: 0.03em;
+  color: #e8e8e8;
+  background: rgba(24, 26, 40, 0.6);
+  border: 1px solid rgba(232, 232, 232, 0.25);
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.cameraToggle:hover {
+  background: rgba(44, 46, 115, 0.6);
+}
+
