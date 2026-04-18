@@ -2,15 +2,36 @@ import { useEffect, useRef } from 'react'
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
-import { getPortById, ports } from '@/data/ports'
+import { getPortById, ports, type Port } from '@/data/ports'
 import { useGameStore } from '@/state/store'
 
 import { createChartStyle } from './chartStyle'
-import { createBridge } from './coords'
+import { createBridge, type CoordinateBridge } from './coords'
+import { formatDistanceNm, greatCircleRoute } from './routing'
 import styles from './Chartplotter.module.css'
 
 const FALLBACK_CENTER: [number, number] = [-122.338, 47.605] // Seattle lng,lat
 const RAD_TO_DEG = 180 / Math.PI
+
+function portPopupHtml(port: Port, bridge: CoordinateBridge | null): string {
+  const boatPos = useGameStore.getState().position
+  let distanceLabel = ''
+  if (bridge) {
+    try {
+      const [boatLat, boatLng] = bridge.localToLatLng([boatPos[0], boatPos[2]])
+      const meters = bridge.distanceMeters([boatLat, boatLng], [port.lat, port.lng])
+      distanceLabel = `${formatDistanceNm(meters)} from boat`
+    } catch {
+      distanceLabel = '—'
+    }
+  }
+  return `
+    <div style="font-family:Inter,system-ui,sans-serif;color:#1a2128;min-width:140px;">
+      <div style="font-weight:600;font-size:14px;margin-bottom:2px;">${port.name}</div>
+      <div style="font-size:12px;color:#58585a;">${distanceLabel}</div>
+    </div>
+  `
+}
 
 export default function Chartplotter() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -36,7 +57,15 @@ export default function Chartplotter() {
       const el = document.createElement('div')
       el.className = styles.portMarker + (selectedIds.has(p.id) ? ' ' + styles.portMarkerSelected : '')
       el.title = p.name
-      new maplibregl.Marker({ element: el }).setLngLat([p.lng, p.lat]).addTo(map)
+      const marker = new maplibregl.Marker({ element: el }).setLngLat([p.lng, p.lat]).addTo(map)
+      el.addEventListener('click', (ev) => {
+        ev.stopPropagation()
+        new maplibregl.Popup({ offset: 14, closeButton: true, closeOnClick: true })
+          .setLngLat([p.lng, p.lat])
+          .setHTML(portPopupHtml(p, bridge))
+          .addTo(map)
+      })
+      void marker
     }
 
     const boatEl = document.createElement('div')
@@ -50,6 +79,19 @@ export default function Chartplotter() {
     const boatMarker = new maplibregl.Marker({ element: boatEl }).setLngLat(boatLngLat).addTo(map)
     boatEl.style.transform = `rotate(${state.heading * RAD_TO_DEG}deg)`
 
+    map.on('load', () => {
+      if (!startPort || !destPort) return
+      const route = greatCircleRoute([startPort.lat, startPort.lng], [destPort.lat, destPort.lng])
+      map.addSource('route', { type: 'geojson', data: route })
+      map.addLayer({
+        id: 'route-line',
+        type: 'line',
+        source: 'route',
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: { 'line-color': '#2c2e73', 'line-width': 2, 'line-opacity': 0.85 },
+      })
+    })
+
     const unsub = useGameStore.subscribe((s) => {
       if (!bridge) return
       try {
@@ -62,10 +104,6 @@ export default function Chartplotter() {
         console.warn('Chartplotter boat marker update failed:', e)
       }
     })
-
-    // Destination marker uses the same start/dest color if picked — nothing to
-    // do here if dest equals startPortId pathologically; skip since UI prevents it.
-    void destPort
 
     return () => {
       unsub()
