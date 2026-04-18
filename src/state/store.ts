@@ -39,6 +39,8 @@ interface GroundingSlice {
   fatalTriggered: boolean
   nearestDistance: number
   depthUnderKeel: number
+  groundingLocation: [number, number] | null
+  groundingPortId: string | null
 }
 
 interface GameActions {
@@ -56,6 +58,12 @@ interface GameActions {
   setDepartureTime: (hours: number) => void
   setTimeCompression: (level: number) => void
   setLoadedPortId: (id: string | null) => void
+  setWarningActive: (active: boolean) => void
+  setFatalTriggered: (triggered: boolean) => void
+  setNearestDistance: (distance: number) => void
+  setDepthUnderKeel: (clearance: number) => void
+  setGroundingLocation: (location: [number, number] | null) => void
+  setGroundingPortId: (id: string | null) => void
 }
 
 export interface GameState extends VoyageSlice, BoatSlice, WorldSlice, UiSlice, GroundingSlice, GameActions {}
@@ -89,6 +97,8 @@ export const useGameStore = create<GameState>()((set) => ({
   fatalTriggered: false,
   nearestDistance: Infinity,
   depthUnderKeel: Infinity,
+  groundingLocation: null,
+  groundingPortId: null,
 
   // Actions
   setBoatPosition: (position) => set({ position }),
@@ -105,4 +115,10 @@ export const useGameStore = create<GameState>()((set) => ({
   setDepartureTime: (departureTime) => set({ departureTime }),
   setTimeCompression: (timeCompression) => set({ timeCompression }),
   setLoadedPortId: (loadedPortId) => set({ loadedPortId }),
+  setWarningActive: (warningActive) => set({ warningActive }),
+  setFatalTriggered: (fatalTriggered) => set({ fatalTriggered }),
+  setNearestDistance: (nearestDistance) => set({ nearestDistance }),
+  setDepthUnderKeel: (depthUnderKeel) => set({ depthUnderKeel }),
+  setGroundingLocation: (groundingLocation) => set({ groundingLocation }),
+  setGroundingPortId: (groundingPortId) => set({ groundingPortId }),
 }))

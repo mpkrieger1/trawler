@@ -164,6 +164,11 @@
   font-weight: 500;
   color: #e8e8e8;
   font-variant-numeric: tabular-nums;
+  transition: color 140ms ease;
+}
+
+.gaugeValueRed {
+  color: #af4035;
 }
 
 .gaugeUnit {

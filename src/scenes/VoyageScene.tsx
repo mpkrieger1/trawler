@@ -3,12 +3,14 @@ import { Canvas } from '@react-three/fiber'
 
 import BoatPhysicsLoop from '@/systems/boatPhysicsLoop'
 import FollowCamera from '@/boat/FollowCamera'
+import GroundingLoop from '@/systems/groundingLoop'
 import KeyboardControls from '@/boat/KeyboardControls'
 import Chartplotter from '@/nav/Chartplotter'
 import Ocean from '@/world/Ocean'
 import PortLoader from '@/world/PortLoader'
 import SkyDome from '@/world/SkyDome'
 import Trawler from '@/boat/Trawler'
+import GroundingVignette from '@/ui/GroundingVignette'
 import Hud from '@/ui/Hud'
 import { useGameStore } from '@/state/store'
 
@@ -34,10 +36,12 @@ export default function VoyageScene() {
             <PortLoader />
           </Suspense>
           <BoatPhysicsLoop />
+          <GroundingLoop />
           <FollowCamera />
         </Canvas>
       )}
       <KeyboardControls />
+      <GroundingVignette />
       <Hud />
     </>
   )
