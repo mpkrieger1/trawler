@@ -246,8 +246,8 @@
 
 .compressionSegment {
   min-width: 52px;
-  min-height: 40px;
-  padding: 0.4rem 0.75rem;
+  min-height: 48px;
+  padding: 0.55rem 0.75rem;
   font-size: 0.9rem;
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   color: #a8b3bd;

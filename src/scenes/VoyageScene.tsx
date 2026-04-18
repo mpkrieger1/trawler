@@ -1,4 +1,4 @@
-import { Suspense } from 'react'
+import { lazy, Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
 import * as THREE from 'three'
 
@@ -6,7 +6,6 @@ import BoatPhysicsLoop from '@/systems/boatPhysicsLoop'
 import FollowCamera from '@/boat/FollowCamera'
 import GroundingLoop from '@/systems/groundingLoop'
 import KeyboardControls from '@/boat/KeyboardControls'
-import Chartplotter from '@/nav/Chartplotter'
 import Ocean from '@/world/Ocean'
 import PortLoader from '@/world/PortLoader'
 import SceneFog from '@/world/SceneFog'
@@ -18,6 +17,10 @@ import { useGameStore } from '@/state/store'
 
 import transitions from './transitions.module.css'
 
+// Code-split: MapLibre (~800 KB) ships in its own chunk, loaded only
+// when the user switches to chart mode (or lands on GameOverScene).
+const Chartplotter = lazy(() => import('@/nav/Chartplotter'))
+
 export default function VoyageScene() {
   const cameraMode = useGameStore((s) => s.cameraMode)
 
@@ -27,7 +30,9 @@ export default function VoyageScene() {
       style={{ position: 'fixed', inset: 0 }}
     >
       {cameraMode === 'chart' ? (
-        <Chartplotter />
+        <Suspense fallback={null}>
+          <Chartplotter />
+        </Suspense>
       ) : (
         <Canvas
           gl={{

@@ -214,8 +214,8 @@
 
 .segment {
   flex: 1;
-  min-height: 44px;
-  padding: 0.4rem 0.5rem;
+  min-height: 48px;
+  padding: 0.55rem 0.5rem;
   font-size: 0.9rem;
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   color: #a8b3bd;

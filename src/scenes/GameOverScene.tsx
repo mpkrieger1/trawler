@@ -1,5 +1,6 @@
+import { lazy, Suspense } from 'react'
+
 import { getPortById } from '@/data/ports'
-import Chartplotter from '@/nav/Chartplotter'
 import { formatDistanceNm } from '@/nav/routing'
 import { useGameStore } from '@/state/store'
 import { clearCollision } from '@/systems/groundingState'
@@ -7,6 +8,9 @@ import { clearCollision } from '@/systems/groundingState'
 import { formatElapsedTime } from './elapsedTime'
 import styles from './GameOver.module.css'
 import transitions from './transitions.module.css'
+
+// Shares the same chunk as VoyageScene's lazy Chartplotter.
+const Chartplotter = lazy(() => import('@/nav/Chartplotter'))
 
 export default function GameOverScene() {
   const groundingPortId = useGameStore((s) => s.groundingPortId)
@@ -34,7 +38,9 @@ export default function GameOverScene() {
   return (
     <div className={`${styles.scene} ${transitions.sceneFadeIn}`}>
       <div className={styles.chartLayer}>
-        <Chartplotter />
+        <Suspense fallback={null}>
+          <Chartplotter />
+        </Suspense>
       </div>
       <div className={styles.overlay}>
         <div className={styles.card}>
