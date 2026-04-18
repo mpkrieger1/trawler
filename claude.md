@@ -249,6 +249,12 @@ resolve: {
 
 Do not remove this config. If the warning returns, verify dedupe is still present.
 
+### Exponential time constants vs. PRD spec times
+When the PRD specifies "time to reach X" for an exponential response (throttle, camera lerp, shader fade, etc.), the exponential time constant τ is roughly `spec_time / 3`. With τ = spec_time / 3 the value reaches ~95% after the spec time; using spec_time directly as τ leaves you at ~63%, which reads as "the boat never quite reaches cruise." Tests encoded literally from PRD spec times will fail in exactly this way — lean on TDD to catch it.
+
+### Multiple input sources writing to the same store field must coordinate
+When two input drivers (pointer drag + keyboard hold, touch + gamepad, etc.) can both write to the same store field, they must coordinate explicitly or they'll race. Symptoms: "the control does ~50% of what it should," "holds don't hold," "feels laggy." Established pattern: a small module-level flag object (see `src/ui/wheelInputState.ts`) that each active driver sets, with a single authority for passive behavior (spring-back, idle decay) that checks the flags. If you add a second writer to an existing store field, plug into the existing flag module rather than starting a new rAF loop.
+
 ---
 
 ## Owner Context
