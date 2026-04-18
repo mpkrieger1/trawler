@@ -3,20 +3,35 @@ import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
 import { useGameStore } from '@/state/store'
+import { weatherPreset } from '@/world/weatherPresets'
 
 const HULL_COLOR = '#e8e0d4'
 const CABIN_COLOR = '#f5f0e8'
 const TRIM_COLOR = '#2C2E73'
 
+const ROLL_FREQ_HZ = 0.35
+const PITCH_FREQ_HZ = 0.55
+const ROLL_AMP_RAD = 0.15
+const PITCH_AMP_RAD = 0.08
+
 export default function Trawler() {
   const groupRef = useRef<THREE.Group>(null)
 
-  useFrame(() => {
+  useFrame((_state, delta) => {
     try {
       if (!groupRef.current) return
-      const { position, heading } = useGameStore.getState()
+      const { position, heading, weather } = useGameStore.getState()
+      const preset = weatherPreset(weather)
+      const t = _state.clock.elapsedTime
+
       groupRef.current.position.set(position[0], position[1], position[2])
       groupRef.current.rotation.y = heading
+      groupRef.current.rotation.z =
+        Math.sin(t * 2 * Math.PI * ROLL_FREQ_HZ) * ROLL_AMP_RAD * preset.pitchRollScale
+      groupRef.current.rotation.x =
+        Math.sin(t * 2 * Math.PI * PITCH_FREQ_HZ) * PITCH_AMP_RAD * preset.pitchRollScale
+
+      void delta
     } catch (e) {
       console.warn('Trawler frame error:', e)
     }
