@@ -38,7 +38,11 @@ export default function GameOverScene() {
   return (
     <div className={`${styles.scene} ${transitions.sceneFadeIn}`}>
       <div className={styles.chartLayer}>
-        <Suspense fallback={null}>
+        <Suspense
+          fallback={
+            <div style={{ position: 'absolute', inset: 0, background: '#0f1419' }} />
+          }
+        >
           <Chartplotter />
         </Suspense>
       </div>

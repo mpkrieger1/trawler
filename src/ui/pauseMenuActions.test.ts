@@ -1,12 +1,25 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 import { useGameStore } from '@/state/store'
+import {
+  clearCollision,
+  getCollision,
+  setCollision,
+  type CollisionJson,
+} from '@/systems/groundingState'
 
 import { resume, returnToMenu } from './pauseMenuActions'
+
+const STUB_COLLISION: CollisionJson = {
+  port: 'seattle',
+  polygons: [],
+  depth_grid: { cell_size: 50, origin: [-5000, -5000], grid: [] },
+}
 
 describe('pauseMenuActions', () => {
   beforeEach(() => {
     useGameStore.getState().resetEverything()
+    clearCollision()
   })
 
   it('resume clears the paused flag', () => {
@@ -32,5 +45,12 @@ describe('pauseMenuActions', () => {
     expect(after.startPortId).toBeNull()
     expect(after.destinationPortId).toBeNull()
     expect(after.position).toEqual([0, 0, 0])
+  })
+
+  it('returnToMenu clears module-level collision state (not just the store)', () => {
+    setCollision('seattle', STUB_COLLISION)
+    expect(getCollision()).not.toBeNull()
+    returnToMenu()
+    expect(getCollision()).toBeNull()
   })
 })

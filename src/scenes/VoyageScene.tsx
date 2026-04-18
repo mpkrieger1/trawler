@@ -30,7 +30,11 @@ export default function VoyageScene() {
       style={{ position: 'fixed', inset: 0 }}
     >
       {cameraMode === 'chart' ? (
-        <Suspense fallback={null}>
+        <Suspense
+          fallback={
+            <div style={{ position: 'absolute', inset: 0, background: '#0f1419' }} />
+          }
+        >
           <Chartplotter />
         </Suspense>
       ) : (
