@@ -6,7 +6,7 @@ export default function CameraToggle() {
   const cameraMode = useGameStore((s) => s.cameraMode)
   const setCameraMode = useGameStore((s) => s.setCameraMode)
 
-  const nextLabel = cameraMode === '3d' ? 'Chart' : '3D View'
+  const nextLabel = cameraMode === '3d' ? 'Chart' : '3D'
 
   return (
     <button

@@ -16,7 +16,27 @@ describe('weatherPreset', () => {
       expect(Number.isFinite(p.wind.magnitudeMps)).toBe(true)
       expect(Number.isFinite(p.wind.bearingRad)).toBe(true)
       expect(p.pitchRollScale).toBeGreaterThanOrEqual(0)
+      expect(typeof p.fog.colorHex).toBe('number')
+      expect(p.fog.near).toBeGreaterThan(0)
+      expect(p.fog.far).toBeGreaterThan(p.fog.near)
     }
+  })
+
+  it('orders fog far-distance Stormy < Overcast < Clear (visibility shrinks with weather)', () => {
+    const c = weatherPreset('clear').fog.far
+    const o = weatherPreset('overcast').fog.far
+    const s = weatherPreset('stormy').fog.far
+    expect(s).toBeLessThan(o)
+    expect(o).toBeLessThan(c)
+  })
+
+  it('uses the tuned fog values (clear 500/8000, overcast 200/3000, stormy 50/800)', () => {
+    expect(weatherPreset('clear').fog.near).toBe(500)
+    expect(weatherPreset('clear').fog.far).toBe(8000)
+    expect(weatherPreset('overcast').fog.near).toBe(200)
+    expect(weatherPreset('overcast').fog.far).toBe(3000)
+    expect(weatherPreset('stormy').fog.near).toBe(50)
+    expect(weatherPreset('stormy').fog.far).toBe(800)
   })
 
   it('orders distortion scale Clear < Overcast < Stormy', () => {

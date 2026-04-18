@@ -29,6 +29,10 @@ interface BoatSlice {
 interface WorldSlice {
   gameTime: number
   loadedPortId: string | null
+  // True when the boat is within 1 nm (~1852 m) of any port center.
+  // Authoritative source: boatPhysicsLoop updates this every 30 frames.
+  // Distinct from loadedPortId !== null, which is a 5 km radius check.
+  isNearPort: boolean
 }
 
 interface UiSlice {
@@ -61,6 +65,7 @@ interface GameActions {
   setDepartureTime: (hours: number) => void
   setTimeCompression: (level: number) => void
   setLoadedPortId: (id: string | null) => void
+  setIsNearPort: (near: boolean) => void
   setWarningActive: (active: boolean) => void
   setFatalTriggered: (triggered: boolean) => void
   setNearestDistance: (distance: number) => void
@@ -96,6 +101,7 @@ export const useGameStore = create<GameState>()((set) => ({
   // World
   gameTime: 0,
   loadedPortId: null,
+  isNearPort: false,
 
   // UI
   activeScene: 'menu',
@@ -125,6 +131,7 @@ export const useGameStore = create<GameState>()((set) => ({
   setDepartureTime: (departureTime) => set({ departureTime }),
   setTimeCompression: (timeCompression) => set({ timeCompression }),
   setLoadedPortId: (loadedPortId) => set({ loadedPortId }),
+  setIsNearPort: (isNearPort) => set({ isNearPort }),
   setWarningActive: (warningActive) => set({ warningActive }),
   setFatalTriggered: (fatalTriggered) => set({ fatalTriggered }),
   setNearestDistance: (nearestDistance) => set({ nearestDistance }),
@@ -148,6 +155,7 @@ export const useGameStore = create<GameState>()((set) => ({
       groundingLocation: null,
       groundingPortId: null,
       loadedPortId: null,
+      isNearPort: false,
       distanceTraveled: 0,
       voyageStartTime: Date.now(),
     }),
@@ -166,6 +174,7 @@ export const useGameStore = create<GameState>()((set) => ({
       throttle: 0,
       wheel: 0,
       loadedPortId: null,
+      isNearPort: false,
       warningActive: false,
       fatalTriggered: false,
       nearestDistance: Infinity,

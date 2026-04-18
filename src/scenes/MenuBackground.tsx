@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { PerspectiveCamera } from '@react-three/drei'
+import * as THREE from 'three'
 
 import Trawler from '@/boat/Trawler'
 import Ocean from '@/world/Ocean'
@@ -14,7 +15,14 @@ const CAMERA_TARGET: [number, number, number] = [0, 2, 0]
 
 export default function MenuBackground() {
   return (
-    <Canvas gl={{ antialias: true }} dpr={[1, 2]}>
+    <Canvas
+      gl={{
+        antialias: true,
+        toneMapping: THREE.ACESFilmicToneMapping,
+        toneMappingExposure: 1.0,
+      }}
+      dpr={[1, 2]}
+    >
       <PerspectiveCamera
         makeDefault
         position={CAMERA_POSITION}

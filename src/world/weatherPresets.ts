@@ -21,6 +21,11 @@ export type WeatherPreset = {
     bearingRad: number // compass direction wind pushes toward (0 = north, π/2 = east)
   }
   pitchRollScale: number // 0 = still; 1 = stormy
+  fog: {
+    colorHex: number
+    near: number
+    far: number
+  }
 }
 
 const CLEAR: WeatherPreset = {
@@ -34,6 +39,7 @@ const CLEAR: WeatherPreset = {
   },
   wind: { magnitudeMps: 0.3, bearingRad: Math.PI / 4 },
   pitchRollScale: 0.1,
+  fog: { colorHex: 0x7fa0b0, near: 500, far: 8000 },
 }
 
 const OVERCAST: WeatherPreset = {
@@ -47,6 +53,7 @@ const OVERCAST: WeatherPreset = {
   },
   wind: { magnitudeMps: 1.5, bearingRad: Math.PI / 4 },
   pitchRollScale: 0.35,
+  fog: { colorHex: 0xa0a8ad, near: 200, far: 3000 },
 }
 
 const STORMY: WeatherPreset = {
@@ -60,6 +67,7 @@ const STORMY: WeatherPreset = {
   },
   wind: { magnitudeMps: 4.0, bearingRad: Math.PI / 2 },
   pitchRollScale: 1.0,
+  fog: { colorHex: 0x3a4a48, near: 50, far: 800 },
 }
 
 export function weatherPreset(state: WeatherState): WeatherPreset {

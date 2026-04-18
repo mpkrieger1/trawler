@@ -9,11 +9,10 @@ import styles from './Hud.module.css'
 export default function TimeCompressionToggle() {
   const selected = useGameStore((s) => s.timeCompression)
   const weather = useGameStore((s) => s.weather)
-  const loadedPortId = useGameStore((s) => s.loadedPortId)
+  const isNearPort = useGameStore((s) => s.isNearPort)
   const setTimeCompression = useGameStore((s) => s.setTimeCompression)
 
   const isStormy = weather === 'stormy'
-  const isNearPort = loadedPortId !== null
   const effective = effectiveCompression(selected, { isStormy, isNearPort })
   const capped = effective !== selected
   const reason = isNearPort ? 'near port' : isStormy ? 'stormy' : null

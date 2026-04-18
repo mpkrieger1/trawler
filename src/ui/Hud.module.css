@@ -203,9 +203,9 @@
   position: absolute;
   top: 20px;
   left: 20px;
-  min-width: 88px;
+  min-width: 64px;
   min-height: 48px;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.9rem;
   font-size: 0.9rem;
   font-family: inherit;
   letter-spacing: 0.03em;

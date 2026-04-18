@@ -28,7 +28,13 @@ export default function BoatPhysicsLoop() {
       frameCountRef.current += 1
       if (bridge && frameCountRef.current % NEAR_PORT_CHECK_EVERY_N_FRAMES === 0) {
         const [lat, lng] = bridge.localToLatLng([s.position[0], s.position[2]])
-        isNearPortRef.current = findNearestPortWithinRadius([lat, lng], NEAR_PORT_METERS) !== null
+        const nextNear = findNearestPortWithinRadius([lat, lng], NEAR_PORT_METERS) !== null
+        isNearPortRef.current = nextNear
+        // Mirror to store so HUD (TimeCompressionToggle) can show the same
+        // 1 nm cap as the physics-side effectiveCompression(). Prior to
+        // this, the HUD used loadedPortId !== null (5 km), which caused a
+        // visual cap indicator that didn't match actual auto-slowdown.
+        if (s.isNearPort !== nextNear) s.setIsNearPort(nextNear)
       }
 
       const compression = effectiveCompression(s.timeCompression, {
