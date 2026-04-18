@@ -10,6 +10,7 @@ interface VoyageSlice {
   startPortId: string | null
   destinationPortId: string | null
   weather: WeatherState
+  // hours since midnight, 0–24 (float allowed)
   departureTime: number
   timeCompression: number
 }
@@ -49,6 +50,11 @@ interface GameActions {
   setActiveScene: (scene: ActiveScene) => void
   setCameraMode: (mode: CameraMode) => void
   setPaused: (paused: boolean) => void
+  setStartPortId: (id: string | null) => void
+  setDestinationPortId: (id: string | null) => void
+  setWeather: (weather: WeatherState) => void
+  setDepartureTime: (hours: number) => void
+  setTimeCompression: (level: number) => void
 }
 
 export interface GameState extends VoyageSlice, BoatSlice, WorldSlice, UiSlice, GroundingSlice, GameActions {}
@@ -92,4 +98,9 @@ export const useGameStore = create<GameState>()((set) => ({
   setActiveScene: (scene) => set({ activeScene: scene }),
   setCameraMode: (mode) => set({ cameraMode: mode }),
   setPaused: (paused) => set({ paused }),
+  setStartPortId: (startPortId) => set({ startPortId }),
+  setDestinationPortId: (destinationPortId) => set({ destinationPortId }),
+  setWeather: (weather) => set({ weather }),
+  setDepartureTime: (departureTime) => set({ departureTime }),
+  setTimeCompression: (timeCompression) => set({ timeCompression }),
 }))
