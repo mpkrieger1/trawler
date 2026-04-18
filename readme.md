@@ -76,11 +76,23 @@ npm run build
 
 This is the primary target platform.
 
-1. Make sure your iPad is on the same Wi-Fi network as your dev machine
-2. Open Safari on the iPad, navigate to the dev server URL
-3. Tap the Share icon → "Add to Home Screen" to install as a PWA (deferred to v1.1)
+### Local install (dev server)
 
-Controls are touch-first: throttle (bottom-left slider), wheel (bottom-right disc), camera toggle, time compression selector, and pause menu.
+```bash
+npm run dev -- --host
+```
+
+Vite will print a `Network:` URL (e.g. `http://192.168.50.45:5173`).
+
+1. Make sure your iPad is on the same Wi-Fi network as your dev machine
+2. Open Safari on the iPad, navigate to the `Network:` URL
+3. Tap the Share icon → **Add to Home Screen** → Add
+
+The app now launches full-screen from the home-screen icon (no Safari chrome). `index.html` sets `apple-mobile-web-app-capable`, a black-translucent status bar, and `viewport-fit=cover` so the HUD respects the rounded-corner safe areas.
+
+To customize the home-screen icon, drop a 180×180 PNG at `public/apple-touch-icon.png` and add `<link rel="apple-touch-icon" href="/apple-touch-icon.png" />` inside `<head>`. Without it, iOS generates one from a screenshot.
+
+Controls are touch-first: throttle (bottom-left slider), wheel (bottom-right disc), camera toggle (top-left), pause (top-right), time compression (top-center), and gauge strip (bottom-center).
 
 ---
 
