@@ -1,15 +1,42 @@
 #!/usr/bin/env node
-// Generates a synthetic collision.json for Seattle so Sprint 4 can verify
-// PortLoader and grounding before real Blender-exported assets are ready.
+// Generates synthetic collision.json files for all 21 Inside Passage ports so
+// PortLoader can verify grounding at every port before real Blender-exported
+// assets arrive. Each port gets the same layout (simplest possible baseline):
 //
-// Polygon: one 2 km × 4 km rectangle of "land" starting 500 m east of origin.
-// Depth grid: 100×100 at 50 m per cell, deep water west of x=450, ramping
-// through shallow (-8 ft) and very-shallow (-2 ft) bands, land (+5 ft) at x≥500.
+//   Polygon: 2 km × 4 km rectangle of "land" starting 500 m east of origin.
+//   Depth grid: 100×100 at 50 m/cell, deep water west of x=450, ramping
+//   through shallow (-8 ft) and very-shallow (-2 ft) bands, land (+5 ft) at x≥500.
 //
 // Run: node scripts/generate-synthetic-port.mjs
 
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { dirname } from 'node:path'
+
+// Keep in sync with src/data/ports.ts. Duplicated here because this is a
+// build-time script run outside the Vite toolchain.
+const PORT_IDS = [
+  'seattle',
+  'bainbridge',
+  'kingston',
+  'port-townsend',
+  'anacortes',
+  'friday-harbor',
+  'roche-harbor',
+  'deer-harbor',
+  'sidney',
+  'nanaimo',
+  'pender-harbour',
+  'campbell-river',
+  'refuge-cove',
+  'port-mcneill',
+  'shearwater',
+  'prince-rupert',
+  'ketchikan',
+  'wrangell',
+  'petersburg',
+  'sitka',
+  'juneau',
+]
 
 const PORT_RADIUS = 2500 // half the 5 km × 5 km port area, in meters
 const CELL_SIZE = 50
@@ -40,25 +67,31 @@ for (let row = 0; row < GRID_N; row++) {
   grid.push(rowArr)
 }
 
-const output = {
-  port: 'seattle',
-  polygons,
-  depth_grid: {
-    cell_size: CELL_SIZE,
-    origin: [-PORT_RADIUS, -PORT_RADIUS],
-    grid,
-  },
-}
-
-const path = 'public/assets/models/ports/seattle.collision.json'
-mkdirSync(dirname(path), { recursive: true })
-writeFileSync(path, JSON.stringify(output))
+const outDir = 'public/assets/models/ports'
+mkdirSync(outDir, { recursive: true })
 
 const vertCount = polygons.reduce((s, p) => s + p.length, 0)
 const flat = grid.flat()
 const min = Math.min(...flat)
 const max = Math.max(...flat)
-console.log(`Wrote ${path}`)
-console.log(`  polygons: ${polygons.length}, vertices: ${vertCount}`)
+
+for (const portId of PORT_IDS) {
+  const output = {
+    port: portId,
+    polygons,
+    depth_grid: {
+      cell_size: CELL_SIZE,
+      origin: [-PORT_RADIUS, -PORT_RADIUS],
+      grid,
+    },
+  }
+  const path = `${outDir}/${portId}.collision.json`
+  writeFileSync(path, JSON.stringify(output))
+  console.log(`Wrote ${path}`)
+}
+
+console.log('')
+console.log(`Generated ${PORT_IDS.length} collision files`)
+console.log(`  polygons per port: ${polygons.length}, vertices: ${vertCount}`)
 console.log(`  depth grid: ${GRID_N}x${GRID_N} = ${flat.length} cells at ${CELL_SIZE} m`)
 console.log(`  depth range: ${min} to ${max} ft`)

@@ -3,6 +3,7 @@ import { Canvas } from '@react-three/fiber'
 import * as THREE from 'three'
 
 import BoatPhysicsLoop from '@/systems/boatPhysicsLoop'
+import CollisionDebugOverlay from '@/world/CollisionDebugOverlay'
 import FollowCamera from '@/boat/FollowCamera'
 import GroundingLoop from '@/systems/groundingLoop'
 import KeyboardControls from '@/boat/KeyboardControls'
@@ -55,6 +56,7 @@ export default function VoyageScene() {
             <SkyDome />
             <Trawler />
             <PortLoader />
+            <CollisionDebugOverlay />
           </Suspense>
           <BoatPhysicsLoop />
           <GroundingLoop />
