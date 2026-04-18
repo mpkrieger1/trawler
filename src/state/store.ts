@@ -25,7 +25,6 @@ interface BoatSlice {
 interface WorldSlice {
   gameTime: number
   loadedPortId: string | null
-  weather: WeatherState
 }
 
 interface UiSlice {
